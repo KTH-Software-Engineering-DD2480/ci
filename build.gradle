@@ -1,0 +1,16 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'ci.Main'
+
+repositories {
+    mavenCentral()
+}
+ 
+dependencies {
+    testImplementation('org.junit.jupiter:junit-jupiter:5.8.2')
+}
+
+test {
+    useJUnitPlatform()
+}
