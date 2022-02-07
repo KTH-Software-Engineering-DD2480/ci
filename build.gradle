@@ -11,6 +11,9 @@ dependencies {
     testImplementation('org.junit.jupiter:junit-jupiter:5.8.2')
     // https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-server
     implementation 'org.eclipse.jetty:jetty-server:11.0.7'
+    // https://mvnrepository.com/artifact/org.json/json
+    implementation 'org.json:json:20211205'
+
 }
 
 test {
