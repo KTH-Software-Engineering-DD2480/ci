@@ -14,16 +14,30 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/**
+ * Handles incoming GitHub webhooks.
+ */
 public class WebhookHandler extends AbstractHandler {
     HashMap<String, EventHandler> eventHandlers;
 
+    /**
+     * Creates a handler for the default set of GitHub webhook events.
+     */
     public WebhookHandler() {
         // setup handlers for GitHub webhook events
         eventHandlers = new HashMap<>();
         eventHandlers.put("push", new PushEventHandler());
     }
 
-    // Handle an incoming GitHub webhook request. The type of the event is extracted from the `X-GitHub-Event` header (not the `target`).
+    /**
+     * Overriden from {@code AbstractHandler}. Handle an incoming GitHub webhook
+     * request. The type of the event is extracted from the `X-GitHub-Event`
+     * header (not the {@code target}).
+     * @param target not used
+     * @param baseRequest the incoming request from GitHub
+     * @param request not used
+     * @param response if the response was successful, fills with an {@code 200 OK} response
+     */
     @Override
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
