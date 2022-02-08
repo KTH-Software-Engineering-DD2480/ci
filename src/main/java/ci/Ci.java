@@ -1,12 +1,9 @@
 import java.io.*;
 import java.lang.*;
 
-public class BuildAndTest {
+public class Ci {
 
-    public static void BuildAndTest(){
-    }
-
-    public static void main(String[] args){
+    public static void Ci(){
         try {
             Runtime rt = Runtime.getRuntime();
             Process process = rt.exec("./gradlew test");
