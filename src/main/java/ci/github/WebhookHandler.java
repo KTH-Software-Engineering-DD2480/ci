@@ -18,10 +18,12 @@ public class WebhookHandler extends AbstractHandler {
     HashMap<String, EventHandler> eventHandlers;
 
     public WebhookHandler() {
+        // setup handlers for GitHub webhook events
         eventHandlers = new HashMap<>();
         eventHandlers.put("push", new PushEventHandler());
     }
 
+    // Handle an incoming GitHub webhook request. The type of the event is extracted from the `X-GitHub-Event` header (not the `target`).
     @Override
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {

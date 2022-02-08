@@ -14,6 +14,7 @@ public class ContinuousIntegrationServer extends AbstractHandler {
     HashMap<String, AbstractHandler> handlers;
 
     public ContinuousIntegrationServer() {
+        // Setup handlers for different paths
         handlers = new HashMap<>();
         handlers.put("/github/webhook", new ci.github.WebhookHandler());
     }
@@ -28,6 +29,7 @@ public class ContinuousIntegrationServer extends AbstractHandler {
             try {
                 handler.handle(target, baseRequest, request, response);
             } catch (RequestException e) {
+                // Special-case our own exception, in order to provide custom status codes. Other exceptions are returned with status 500.
                 response.setStatus(e.status);
                 response.getWriter().print(e.toString());
                 baseRequest.setHandled(true);
