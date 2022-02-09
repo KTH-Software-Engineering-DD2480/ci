@@ -2,7 +2,6 @@ package ci.github;
 
 import java.io.IOException;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import jakarta.servlet.ServletException;

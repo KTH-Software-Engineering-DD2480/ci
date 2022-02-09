@@ -1,13 +1,14 @@
+package ci;
+
 import org.junit.jupiter.api.Test;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 import org.json.JSONArray;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-public class JSONTest{
+public class JSONTest {
 
 	// assert true if the JSON object is empty
     @Test
