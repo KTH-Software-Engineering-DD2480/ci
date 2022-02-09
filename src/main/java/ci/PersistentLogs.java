@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Arrays;
+import java.util.ArrayList;
 
 import org.json.JSONTokener;
 import org.json.JSONObject;
@@ -62,32 +63,14 @@ public class PersistentLogs {
         else if (files_with_README.length == 0) return new File[0];
         else if (files_with_README.length == 1 && files_with_README[0].getName().equals("README.md")) return new File[0];
 
-        boolean has_README = false;
-        for (File file : files_with_README) {
-            if (file.getName().equals("README.md")) {
-                has_README = true;
-                break;
-            }
-        }
-        if (!has_README) {
-            Arrays.sort(files_with_README, (f1, f2) -> {
-                return Integer.parseInt(f1.getName().split("_")[0])
-                    - Integer.parseInt(f2.getName().split("_")[0]);
-            });
-            return files_with_README;
-        }
-        File[] files = new File[files_with_README.length - 1];
-        int i = 0;
-        for (File file : files_with_README) {
-            if (file.getName().equals("README.md")) continue;
-            files[i] = file;
-            i++;
-        }
-        Arrays.sort(files, (f1, f2) -> {
+        ArrayList<File> files = new ArrayList<File>(Arrays.asList(files_with_README));
+        files.removeIf(file -> !file.getName().endsWith(".log"));
+        File[] sorted_files = files.toArray(new File[files.size()]);
+        Arrays.sort(sorted_files, (f1, f2) -> {
             return Integer.parseInt(f1.getName().split("_")[0])
                 - Integer.parseInt(f2.getName().split("_")[0]);
         });
-        return files;
+        return sorted_files;
     }
 
     /**
