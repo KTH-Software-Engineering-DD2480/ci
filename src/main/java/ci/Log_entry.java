@@ -12,12 +12,13 @@ public class Log_entry {
     public Test_status status;      // Did the build succeed or fail?
     public String gradle_output;    // The console output of the gradle build
 
-    public Log_entry(Log_type type, String refspec, String commit_SHA, Date date_time, Test_status status) {
+    public Log_entry(Log_type type, String refspec, String commit_SHA, Date date_time, Test_status status, String gradle_output) {
         this.type = type;
         this.refspec = refspec;
         this.commit_SHA = commit_SHA;
         this.date_time = date_time;
         this.status = status;
+        this.gradle_output = gradle_output;
     }
 
     public String generate_log_file_name() {

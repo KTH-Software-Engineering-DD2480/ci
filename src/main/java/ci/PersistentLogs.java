@@ -12,11 +12,13 @@ import org.json.JSONObject;
 
 
 public class PersistentLogs {
-    public static String path;         // The folder where the logs are stored.
+    public static String path;  // The relative path to the folder where the logs are stored.
     public int build_number;    // The build number for easier ordering of logs and unique identifiers
 
-    // Initialize the persistent logs object. This object knows where to store and read logs and keeps track of
-    // how many builds have been performed.
+    /**
+     * Constructor for the PersistentLogs class.
+     * @param path_to_logs_folder - relative path to a place where the logs should be stored.
+     */
     public PersistentLogs(String path_to_logs_folder) {
         this.path = path_to_logs_folder;
         File[] files = all_logs();
@@ -28,8 +30,10 @@ public class PersistentLogs {
         }
     }
 
-    // Add a log to the folder the class is initialized with. The log's name is the build number and the type of the
-    // commit separated by an underscore.
+    /**
+     * Add a log file with JSON data taken from the parameter log_entry.
+     * @param log_entry - The Log_entry object containing data to be written to the log file
+     */
     public void add_log(Log_entry log_entry) {
         try {
             File log_file = new File(path + "/" + this.build_number + "_" + log_entry.generate_log_file_name());
@@ -45,8 +49,10 @@ public class PersistentLogs {
         }
     }
 
-    // Return an array with all the log files in the logs folder (excluding the README.md).
-    // If the folder doesn't yet exist, it will be created.
+    /**
+     * Look into the logs folder and return all *log* files in it, if the directory doesn't exist yet it is created
+     * @return An array of all log files in the logs folder
+     */
     public File[] all_logs() {
         File[] files_with_README = new File(path).listFiles();
         if (files_with_README == null) {
@@ -84,6 +90,11 @@ public class PersistentLogs {
         return files;
     }
 
+    /**
+     * Convert and return Log_entry from JSON in file specified by log_file
+     * @param log_file - the file to read the JSON data from
+     * @return the Log_entry object
+     */
     // Given a File object (usually created by all_logs() or by specifying a file name), return the
     // contents of the file as a Log_entry object.
     public static Log_entry get_log(File log_file) {
@@ -96,7 +107,8 @@ public class PersistentLogs {
                 json_object.getString("refspec"),
                 json_object.getString("commit_SHA"),
                 new Date(json_object.getLong("date_time")),
-                Log_entry.Test_status.valueOf(json_object.getString("status"))
+                Log_entry.Test_status.valueOf(json_object.getString("status")),
+                json_object.getString("gradle_output")
             );
             // Prevent absurd behaviour where file isn't deleted when output stream isn't closed in this terminated function.
             fr.close();
@@ -107,7 +119,9 @@ public class PersistentLogs {
         return null;
     }
 
-    // Attempt to delete all test log files in logs folder.
+    /**
+     * Attempt to delete all test log files in logs folder
+     */
     public static void delete_test_logs() {
         File[] files = new File(path).listFiles();
         for (File f : files) {
