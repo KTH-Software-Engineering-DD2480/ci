@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PersistentLogsTest {
-    @BeforeEach
+    @AfterEach
     void delete_test_logs_directory() {
         File test_directory = new File("test_logs");
         if (test_directory.exists()) {
