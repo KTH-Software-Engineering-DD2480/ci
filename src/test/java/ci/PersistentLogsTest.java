@@ -34,7 +34,7 @@ public class PersistentLogsTest {
         test_logs.add_log(le);
         assertEquals(num_logs + 1, test_logs.build_number);
         assertEquals(true, le.toString().equals(PersistentLogs.get_log(test_logs.all_logs()[num_logs]).toString()));
-        test_logs.delete_test_logs();
+        test_logs.delete_logs();
         test_directory.delete();
     }
 }

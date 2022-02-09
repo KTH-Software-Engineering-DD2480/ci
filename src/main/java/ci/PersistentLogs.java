@@ -120,13 +120,13 @@ public class PersistentLogs {
     }
 
     /**
-     * Attempt to delete all test log files in logs folder
+     * Attempt to delete all log files in logs folder
      */
-    public static void delete_test_logs() {
+    public static void delete_logs() {
         File[] files = new File(path).listFiles();
         for (File f : files) {
             System.out.println("Trying to delete: " + f.getName());
-            if (f.getName().endsWith("_TEST.log")) {
+            if (f.getName().endsWith(".log")) {
                 f.delete();
             }
         }
