@@ -12,25 +12,18 @@ import org.json.JSONObject;
 
 
 public class PersistentLogs {
-    public String path;         // The folder where the logs are stored.
+    public static String path;         // The folder where the logs are stored.
     public int build_number;    // The build number for easier ordering of logs and unique identifiers
 
     // Initialize the persistent logs object. This object knows where to store and read logs and keeps track of
     // how many builds have been performed.
     public PersistentLogs(String path_to_logs_folder) {
         this.path = path_to_logs_folder;
-        File[] files = new File(path).listFiles();
-        if (files.length == 1) {
+        File[] files = all_logs();
+        if (files.length == 0) {
             this.build_number = 0;
         } else {
-            // (Lambda) In line comparing function, since file name sorting is not equal across major OSes (and 10
-            // is sometimes less than 2).
-            Arrays.sort(files, (f1, f2) -> {
-                if (f1.getName().equals("README.md")) return -1;
-                else if (f2.getName().equals("README.md")) return 1;
-                return Integer.parseInt(f1.getName().split("_")[0]) 
-                    - Integer.parseInt(f2.getName().split("_")[0]);
-            });
+            // By grabbing the latest log, the counting is uninterrupted in the case of accidental log deletions.
             this.build_number = Integer.parseInt(files[files.length - 1].getName().split("_")[0]) + 1;
         }
     }
@@ -52,21 +45,46 @@ public class PersistentLogs {
         }
     }
 
-    // Return an array with all the files in the logs folder (including the README.md file which will be 
-    // in position [0]).
-    public File[] all_files() {
-        File[] files = new File(path).listFiles();
-        if (files.length == 1) return files;
+    // Return an array with all the log files in the logs folder (excluding the README.md).
+    // If the folder doesn't yet exist, it will be created.
+    public File[] all_logs() {
+        File[] files_with_README = new File(path).listFiles();
+        if (files_with_README == null) {
+            new File(path).mkdir();
+            return new File[0];
+        }
+        else if (files_with_README.length == 0) return new File[0];
+        else if (files_with_README.length == 1 && files_with_README[0].getName().equals("README.md")) return new File[0];
+
+        boolean has_README = false;
+        for (File file : files_with_README) {
+            if (file.getName().equals("README.md")) {
+                has_README = true;
+                break;
+            }
+        }
+        if (!has_README) {
+            Arrays.sort(files_with_README, (f1, f2) -> {
+                return Integer.parseInt(f1.getName().split("_")[0])
+                    - Integer.parseInt(f2.getName().split("_")[0]);
+            });
+            return files_with_README;
+        }
+        File[] files = new File[files_with_README.length - 1];
+        int i = 0;
+        for (File file : files_with_README) {
+            if (file.getName().equals("README.md")) continue;
+            files[i] = file;
+            i++;
+        }
         Arrays.sort(files, (f1, f2) -> {
-            if (f1.getName().equals("README.md")) return -1;
-            else if (f2.getName().equals("README.md")) return 1;
-            return Integer.parseInt(f1.getName().split("_")[0]) 
+            return Integer.parseInt(f1.getName().split("_")[0])
                 - Integer.parseInt(f2.getName().split("_")[0]);
         });
         return files;
     }
 
-    // Given a File object (usually created by all_files() or by specifying a file name), return the 
+    // Given a File object (usually created by all_logs() or by specifying a file name), return the
     // contents of the file as a Log_entry object.
     public static Log_entry get_log(File log_file) {
         try {
@@ -82,7 +100,7 @@ public class PersistentLogs {
             );
             // Prevent absurd behaviour where file isn't deleted when output stream isn't closed in this terminated function.
             fr.close();
-            return le;            
+            return le;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -91,7 +109,7 @@ public class PersistentLogs {
 
     // Attempt to delete all test log files in logs folder.
     public static void delete_test_logs() {
-        File[] files = new File("logs").listFiles();
+        File[] files = new File(path).listFiles();
         for (File f : files) {
             System.out.println("Trying to delete: " + f.getName());
             if (f.getName().endsWith("_TEST.log")) {
