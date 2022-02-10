@@ -7,6 +7,8 @@ import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -112,7 +114,7 @@ public class LogsRestHandler extends AbstractHandler {
      * @return a JSON object representing the date
      */
     static JSONObject dateToJson(Date date) {
-        var calendar = Calendar.getInstance();
+        var calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Stockholm"), Locale.forLanguageTag("sv"));
         calendar.setTime(date);
 
         JSONObject time = new JSONObject();
