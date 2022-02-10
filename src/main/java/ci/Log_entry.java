@@ -34,6 +34,7 @@ public class Log_entry {
     public String toString() {
         JSONObject json_object = new JSONObject();
         json_object.put("type", type.toString());
+        json_object.put("repo_url", repo_url);
         json_object.put("refspec", refspec);
         json_object.put("commit_SHA", commit_SHA);
         json_object.put("date_time", date_time.getTime());
