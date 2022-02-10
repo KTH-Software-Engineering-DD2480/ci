@@ -29,7 +29,7 @@ public class PersistentLogsTest {
             test_directory.mkdir();
         }
         PersistentLogs test_logs = new PersistentLogs("test_logs");
-        Log_entry le = new Log_entry(Log_entry.Log_type.PUSH, "https://github.com/KTH-Software-Engineering-DD2480/ci", "refs/heads/master", "this_is_a_test_commit", new Date(), Log_entry.Test_status.SUCCESS, "this is a test gradle output");
+        Log_entry le = new Log_entry(Helpers.Log_type.PUSH, "https://github.com/KTH-Software-Engineering-DD2480/ci", "refs/heads/master", "this_is_a_test_commit", new Date(), Log_entry.Test_status.SUCCESS, "this is a test gradle output");
         int num_logs = test_logs.build_number;
         test_logs.add_log(le);
         assertEquals(num_logs + 1, test_logs.build_number);
