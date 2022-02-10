@@ -15,6 +15,9 @@ dependencies {
     implementation 'org.json:json:20211205'
     // https://mvnrepository.com/artifact/org.eclipse.jgit/org.eclipse.jgit
     implementation 'org.eclipse.jgit:org.eclipse.jgit:6.0.0.202111291000-r'
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation 'commons-io:commons-io:2.6'
+
 }
 
 test {
