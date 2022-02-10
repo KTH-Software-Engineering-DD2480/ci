@@ -113,7 +113,7 @@ public class PersistentLogs {
 
         Log_entry[] entries = new Log_entry[count];
         for (int i = 0; i < count; i++) {
-            entries[i] = get_log(files[offset + i]);
+            entries[i] = get_log(files[files.length - 1 - (offset + i)]);
         }
 
         return entries;
