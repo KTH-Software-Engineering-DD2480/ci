@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 
 public class PersistentLogs {
-    public static String path;  // The relative path to the folder where the logs are stored.
+    public String path;  // The relative path to the folder where the logs are stored.
     public int build_number;    // The build number for easier ordering of logs and unique identifiers
 
     /**
@@ -35,19 +35,15 @@ public class PersistentLogs {
      * Add a log file with JSON data taken from the parameter log_entry.
      * @param log_entry - The Log_entry object containing data to be written to the log file
      */
-    public void add_log(Log_entry log_entry) {
-        try {
-            File log_file = new File(path + "/" + this.build_number + "_" + log_entry.generate_log_file_name());
-            this.build_number++;
-            if (!log_file.exists()) {
-                log_file.createNewFile();
-            }
-            FileWriter fw = new FileWriter(log_file);
-            fw.write(log_entry.toString());
-            fw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void add_log(Log_entry log_entry) throws IOException {
+        File log_file = new File(path + "/" + this.build_number + "_" + log_entry.generate_log_file_name());
+        this.build_number++;
+        if (!log_file.exists()) {
+            log_file.createNewFile();
         }
+        FileWriter fw = new FileWriter(log_file);
+        fw.write(log_entry.toString());
+        fw.close();
     }
 
     /**
@@ -55,11 +51,13 @@ public class PersistentLogs {
      * @return An array of all log files in the logs folder
      */
     public File[] all_logs() {
-        File[] files_with_README = new File(path).listFiles();
+        File[] files_with_README = new File(this.path).listFiles();
         if (files_with_README == null) {
-            new File(path).mkdir();
+            new File(this.path).mkdir();
             return new File[0];
         }
+
+        // Edge cases
         else if (files_with_README.length == 0) return new File[0];
         else if (files_with_README.length == 1 && files_with_README[0].getName().equals("README.md")) return new File[0];
 
@@ -78,35 +76,29 @@ public class PersistentLogs {
      * @param log_file - the file to read the JSON data from
      * @return the Log_entry object
      */
-    // Given a File object (usually created by all_logs() or by specifying a file name), return the
-    // contents of the file as a Log_entry object.
-    public static Log_entry get_log(File log_file) {
-        try {
-            if (log_file.getName().equals("README.md")) return null;
-            FileReader fr = new FileReader(log_file);
-            JSONObject json_object = new JSONObject(new JSONTokener(fr));
-            Log_entry le = new Log_entry(
-                Log_entry.Log_type.valueOf(json_object.getString("type")),
-                json_object.getString("refspec"),
-                json_object.getString("commit_SHA"),
-                new Date(json_object.getLong("date_time")),
-                Log_entry.Test_status.valueOf(json_object.getString("status")),
-                json_object.getString("gradle_output")
-            );
-            // Prevent absurd behaviour where file isn't deleted when output stream isn't closed in this terminated function.
-            fr.close();
-            return le;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static Log_entry get_log(File log_file) throws IOException {
+        if (!log_file.exists()) return null;
+        if (log_file.getName().equals("README.md")) return null;
+        FileReader fr = new FileReader(log_file);
+        JSONObject json_object = new JSONObject(new JSONTokener(fr));
+        Log_entry le = new Log_entry(
+            Log_entry.Log_type.valueOf(json_object.getString("type")),
+            json_object.getString("refspec"),
+            json_object.getString("commit_SHA"),
+            new Date(json_object.getLong("date_time")),
+            Log_entry.Test_status.valueOf(json_object.getString("status")),
+            json_object.getString("gradle_output")
+        );
+        // Prevent absurd behaviour where file isn't deleted when output stream isn't closed in this terminated function.
+        fr.close();
+        return le;
     }
 
     /**
      * Attempt to delete all log files in logs folder
      */
-    public static void delete_logs() {
-        File[] files = new File(path).listFiles();
+    public void delete_logs() {
+        File[] files = new File(this.path).listFiles();
         for (File f : files) {
             System.out.println("Trying to delete: " + f.getName());
             if (f.getName().endsWith(".log")) {
