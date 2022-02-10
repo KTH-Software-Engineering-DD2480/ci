@@ -27,6 +27,7 @@ public class ContinuousIntegrationServer extends AbstractHandler {
         handlers = new HashMap<>();
         handlers.put("/github/webhook", new ci.github.WebhookHandler());
         handlers.put("/logs", new ci.LogsRestHandler());
+        handlers.put("/view-logs", new ci.ViewLogsHandler());
     }
 
     /**
