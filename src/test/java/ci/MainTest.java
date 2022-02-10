@@ -8,10 +8,5 @@ class MainTest {
     void alwaysTrue() {
         assertEquals(3, 2 + 1);
     }
-
-    @Test
-    void wrongAssertion() {
-        assertEquals(4, 2 + 1);
-    }
 }
 
