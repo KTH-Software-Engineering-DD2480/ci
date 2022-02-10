@@ -50,3 +50,5 @@ This project is a group effort by:
 - Philip Salqvist [phisal@kth.se](mailto:phisal@kth.se)
 
 ## Way of Working
+
+[https://docs.google.com/document/d/1PODeI8va49XdJgh6EDSfmRnwnGFsB_-AD8VI5771rP0/edit#](https://docs.google.com/document/d/1PODeI8va49XdJgh6EDSfmRnwnGFsB_-AD8VI5771rP0/edit#)
