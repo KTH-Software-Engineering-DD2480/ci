@@ -56,7 +56,7 @@ public class JSONTest {
 		JSONArray items = obj.getJSONArray("items");
 
 		// assert that the correct values are obtained
-		assertEquals(2, items.get(0));
+		assertEquals(1, items.get(0));
 		assertEquals(2, items.get(1));
 	
 	
