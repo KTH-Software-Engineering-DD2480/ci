@@ -11,8 +11,9 @@ import java.net.http.HttpResponse.BodyHandlers;
 
 import org.json.JSONObject;
 
+import ci.Helpers.Status;
+
 public class UpdateStatus {
-    public enum Status {error, failure, pending, success}
 
     /**
      * Takes strings `url` and `status` as inputs, and updates commit for the

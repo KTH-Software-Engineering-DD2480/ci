@@ -18,7 +18,7 @@ public class LogsRestHandlerTest {
         String commit = "this_is_a_test_commit";
         Date date = new Date(1644490638442L); // Just a (not quite) random date converted from milliseconds
         String output = "this is a test gradle output";
-        Log_entry entry = new Log_entry(Log_entry.Log_type.PUSH, repo, refspec, commit, date, Log_entry.Test_status.SUCCESS, output);
+        Log_entry entry = new Log_entry(Helpers.Log_type.PUSH, repo, refspec, commit, date, Helpers.Status.success, output);
 
         JSONObject actual = LogsRestHandler.logEntryToRestJson(entry);
 

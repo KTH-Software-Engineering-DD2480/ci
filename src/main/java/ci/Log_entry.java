@@ -4,16 +4,19 @@ import java.util.Date;
 
 import org.json.JSONObject;
 
+import ci.Helpers.Log_type;
+import ci.Helpers.Status;
+
 public class Log_entry {
     public Log_type type;           // The type of the log entry
     public String repo_url;         // URL to the repository
     public String refspec;          // e.g. refs/heads/master
     public String commit_SHA;       // The SHA of the most recent commit after the push
     public Date date_time;          // The date and time of the push
-    public Test_status status;      // Did the build succeed or fail?
+    public Status status;      // Did the build succeed or fail?
     public String gradle_output;    // The console output of the gradle build
 
-    public Log_entry(Log_type type, String repo_url, String refspec, String commit_SHA, Date date_time, Test_status status, String gradle_output) {
+    public Log_entry(Log_type type, String repo_url, String refspec, String commit_SHA, Date date_time, Status status, String gradle_output) {
         this.type = type;
         this.repo_url = repo_url;
         this.refspec = refspec;
@@ -38,15 +41,6 @@ public class Log_entry {
         json_object.put("status", status.toString());
         json_object.put("gradle_output", gradle_output);
         return json_object.toString();
-    }
-
-    enum Log_type {
-        PUSH
-    }
-
-    enum Test_status {
-        SUCCESS,
-        FAILURE
     }
 }
 

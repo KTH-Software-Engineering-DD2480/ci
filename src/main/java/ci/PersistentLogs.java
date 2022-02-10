@@ -82,12 +82,12 @@ public class PersistentLogs {
         FileReader fr = new FileReader(log_file);
         JSONObject json_object = new JSONObject(new JSONTokener(fr));
         Log_entry le = new Log_entry(
-            Log_entry.Log_type.valueOf(json_object.getString("type")),
+            Helpers.Log_type.valueOf(json_object.getString("type")),
             json_object.getString("repo_url"),
             json_object.getString("refspec"),
             json_object.getString("commit_SHA"),
             new Date(json_object.getLong("date_time")),
-            Log_entry.Test_status.valueOf(json_object.getString("status")),
+            Helpers.Status.valueOf(json_object.getString("status")),
             json_object.getString("gradle_output")
         );
         // Prevent absurd behaviour where file isn't deleted when output stream isn't closed in this terminated function.
