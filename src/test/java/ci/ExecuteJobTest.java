@@ -25,7 +25,7 @@ public class ExecuteJobTest {
             "executeTestTemp",
             "26ff15a3a0465231fe512f05fd48fef06375e132",
             "https://api.github.com/repos/KTH-Software-Engineering-DD2480/ci/statuses/26ff15a3a0465231fe512f05fd48fef06375e132",
-            "refs/heads/master",
+            "refs/heads/main",
             testLogDirectory);
         assertEquals(true, new File(testLogDirectory + "/0_PUSH.log").exists());
     }

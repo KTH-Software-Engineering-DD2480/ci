@@ -15,6 +15,9 @@ public class Main {
     public static void main(String[] args) throws Exception {
         System.out.println("Hello CI!");
 
+        JobQueueConsumer jobQueue = new JobQueueConsumer();
+        jobQueue.start();
+
         Server server = new Server(PORT);
         server.setHandler(new ContinuousIntegrationServer());
         server.start();
