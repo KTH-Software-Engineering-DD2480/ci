@@ -12,6 +12,7 @@ import java.net.http.HttpResponse.BodyHandlers;
 import org.json.JSONObject;
 
 import ci.Helpers.Status;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class UpdateStatus {
 
@@ -24,18 +25,26 @@ public class UpdateStatus {
      */
     public static void updateStatus(String url, Status status) 
         throws IOException, URISyntaxException, InterruptedException {
+        JSONObject parameters = new JSONObject();
+        parameters.put("state", status.toString());
+        parameters.put("context", "KTH CI-17 - gradle test");
         
         String accessToken = getGitHubAccessTokenFromEnvironment();
         HttpRequest request = HttpRequest.newBuilder()
         .uri(new URI(url))
-        .headers("accept", "application/vnd.github.v3+json", "Authorization", accessToken)
-        .POST(HttpRequest.BodyPublishers.ofString("{\"state\":\"" + status + "\"}"))
+        .headers("accept", "application/vnd.github.v3+json", "Authorization", "token " + accessToken)
+        .POST(HttpRequest.BodyPublishers.ofString(parameters.toString()))
         .build();
         
-        HttpClient.newBuilder()
-        .build()
-        .send(request, BodyHandlers.ofString());
+        var response = HttpClient.newBuilder()
+                .build()
+                .send(request, BodyHandlers.ofString());
 
+        int code = response.statusCode();
+        if (code < 200 || code >= 300) {
+            System.err.println(response.body());
+            throw new IOException("failed to update commit status: " + code);
+        }
     }
 
     // load the GitHub secret token from an environemnt variable
