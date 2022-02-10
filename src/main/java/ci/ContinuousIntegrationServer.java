@@ -26,6 +26,7 @@ public class ContinuousIntegrationServer extends AbstractHandler {
         // Setup handlers for different paths
         handlers = new HashMap<>();
         handlers.put("/github/webhook", new ci.github.WebhookHandler());
+        handlers.put("/logs", new ci.LogsRestHandler());
     }
 
     /**
@@ -39,7 +40,7 @@ public class ContinuousIntegrationServer extends AbstractHandler {
     @Override
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        System.out.println("routing " + target);
+        System.out.println("routing: " + target);
 
         AbstractHandler handler = handlers.get(target);
         if (handler != null) {
