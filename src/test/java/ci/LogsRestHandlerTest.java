@@ -20,7 +20,7 @@ public class LogsRestHandlerTest {
         String output = "this is a test gradle output";
         Log_entry entry = new Log_entry(Log_entry.Log_type.PUSH, repo, refspec, commit, date, Log_entry.Test_status.SUCCESS, output);
 
-        JSONObject actual = LogsRestHandler.logEntryToJson(entry);
+        JSONObject actual = LogsRestHandler.logEntryToRestJson(entry);
 
         String expected_string = """
             {

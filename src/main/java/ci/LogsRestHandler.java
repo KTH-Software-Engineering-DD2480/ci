@@ -72,7 +72,7 @@ public class LogsRestHandler extends AbstractHandler {
 
         JSONArray entries = new JSONArray();
         for (var log : log_entries) {
-            entries.put(logEntryToJson(log));
+            entries.put(logEntryToRestJson(log));
         }
         root.put("entries", entries);
 
@@ -89,12 +89,12 @@ public class LogsRestHandler extends AbstractHandler {
      * @param log the log entry to convert
      * @return a JSON object representing the log entry.
      */
-    static JSONObject logEntryToJson(Log_entry log) {
+    static JSONObject logEntryToRestJson(Log_entry log) {
         JSONObject entry = new JSONObject();
         entry.put("repo", log.repo_url);
         entry.put("refspec", log.refspec);
         entry.put("commit", log.commit_SHA);
-        entry.put("datetime", dateToJson(log.date_time));
+        entry.put("datetime", dateToRestJson(log.date_time));
 
         JSONArray steps = new JSONArray();
 
@@ -113,7 +113,7 @@ public class LogsRestHandler extends AbstractHandler {
      * @param date the date to convert
      * @return a JSON object representing the date
      */
-    static JSONObject dateToJson(Date date) {
+    static JSONObject dateToRestJson(Date date) {
         var calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Stockholm"), Locale.forLanguageTag("sv"));
         calendar.setTime(date);
 
