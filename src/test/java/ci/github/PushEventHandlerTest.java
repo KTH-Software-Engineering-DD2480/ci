@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
-import static ci.github.PushEventHandler.PushEventData;;
+import static ci.JobQueueConsumer.WorkItem;
 
 public class PushEventHandlerTest {
     // Make sure that we can properly parse a webhook request made by GitHub.
@@ -210,11 +210,12 @@ public class PushEventHandlerTest {
         """;
 
         JSONObject object = new JSONObject(body);
-        PushEventData data = new PushEventData(object);
+        WorkItem item = PushEventHandler.extractWorkItem(object);
 
-        assertEquals("https://github.com/nolanderc/ci-test-repo", data.url);
-        assertEquals("refs/heads/main", data.ref);
-        assertEquals("fdb6f8d7d29dc36bb36ec3783680d7ccb44cea10", data.head);
-        assertEquals("blah", data.message);
+        assertEquals("https://github.com/nolanderc/ci-test-repo", item.repoUrl);
+        assertEquals("https://api.github.com/repos/nolanderc/ci-test-repo/statuses/fdb6f8d7d29dc36bb36ec3783680d7ccb44cea10", item.statusUrl);
+        assertEquals("refs/heads/main", item.ref);
+        assertEquals("fdb6f8d7d29dc36bb36ec3783680d7ccb44cea10", item.head);
+        assertEquals("blah", item.message);
     }
 }
