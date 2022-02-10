@@ -83,6 +83,7 @@ public class PersistentLogs {
         JSONObject json_object = new JSONObject(new JSONTokener(fr));
         Log_entry le = new Log_entry(
             Log_entry.Log_type.valueOf(json_object.getString("type")),
+            json_object.getString("repo_url"),
             json_object.getString("refspec"),
             json_object.getString("commit_SHA"),
             new Date(json_object.getLong("date_time")),
@@ -92,6 +93,30 @@ public class PersistentLogs {
         // Prevent absurd behaviour where file isn't deleted when output stream isn't closed in this terminated function.
         fr.close();
         return le;
+    }
+
+    /**
+     * Get a range of the most recent log messages
+     * @param offset number of log messages to skip (ie. a higher number leads to looking further back the history)
+     * @param count number of log messages to return
+     * @return the {@code count} most recent log messages, but skipping the first `offset` number of them
+     * @throws IOException if a log couldn't be read
+     */
+    public Log_entry[] getLogRange(int offset, int count) throws IOException {
+        File[] files = this.all_logs();
+
+        // clamp `offset` to the valid range `0 <= offset <= files.length`
+        offset = Math.min(Math.max(offset, 0), files.length);
+
+        // clamp `count` to the valid range `0 <= count && count + offset <= files.length`
+        count = Math.min(Math.max(count, 0), files.length - offset);
+
+        Log_entry[] entries = new Log_entry[count];
+        for (int i = 0; i < count; i++) {
+            entries[i] = get_log(files[offset + i]);
+        }
+
+        return entries;
     }
 
     /**
