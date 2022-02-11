@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class MainTest {
     @Test
     void alwaysTrue() {
-        assertEquals(3, 2 + 1);
+        assertEquals(4, 2 + 1);
     }
 }
 
