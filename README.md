@@ -17,9 +17,9 @@ The server keeps the history of the past build logs in a local folder, more deta
 
 To test the service you will need the following:
 
-- Java 11+
+- Java 15+
 - Gradle
-- Ngrok
+- Ngrok (Optional)
 - Github repository
 
 ## Usage
