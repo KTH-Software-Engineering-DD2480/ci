@@ -48,6 +48,11 @@ gradle build
 gradle test
 ```
 
+### Building Documentation
+
+```sh
+gradle javadoc
+```
 
 # Contributions
 
